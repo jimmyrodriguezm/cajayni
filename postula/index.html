@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Postula · CAJAYNI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,300..800,0..100&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F2ECDF;
+    --paper-2:#EAE2D0;
+    --ink:#1B1614;
+    --stone:#7A6D5F;
+    --line:#D8CFBB;
+    --gold:#C48A2C;
+    --gold-soft:#E8C583;
+    --jade:#2E6B5E;
+    --clay:#9C3F2A;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    font-family:"Instrument Sans", -apple-system, Segoe UI, sans-serif;
+    background:var(--paper);
+    color:var(--ink);
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+    background-image:
+      radial-gradient(circle at 15% 8%, rgba(196,138,44,.06), transparent 40%),
+      radial-gradient(circle at 90% 90%, rgba(46,107,94,.05), transparent 45%);
+    min-height:100vh;
+  }
+  .serif{font-family:"Fraunces", Georgia, serif;font-optical-sizing:auto}
+  .mono{font-family:"JetBrains Mono", ui-monospace, monospace}
+
+  .topbar{
+    position:sticky;top:0;z-index:10;
+    backdrop-filter:blur(8px);
+    background:rgba(242,236,223,.85);
+    border-bottom:1px solid var(--line);
+  }
+  .topbar-inner{
+    max-width:880px;margin:0 auto;padding:14px 24px;
+    display:flex;align-items:center;justify-content:space-between;gap:24px;
+  }
+  .brand{display:flex;align-items:baseline;gap:10px}
+  .brand .mark{
+    font-family:"Fraunces",serif;font-weight:500;font-style:italic;
+    font-size:20px;letter-spacing:-.01em;
+  }
+  .brand .divider{width:1px;height:14px;background:var(--line)}
+  .brand .sub{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--stone)}
+  .progress{height:5px;background:var(--paper-2);position:relative;overflow:hidden}
+  .progress>div{
+    height:100%;
+    background:linear-gradient(90deg,var(--gold) 0%,var(--clay) 55%,var(--jade) 100%);
+    background-size:200% 100%;width:0;
+    transition:width .6s cubic-bezier(.65,0,.35,1);
+    box-shadow:0 0 8px rgba(196,138,44,.35);
+  }
+
+  .wrap{max-width:880px;margin:0 auto;padding:56px 24px 120px}
+  .card{max-width:640px;margin:0 auto;animation:fadeUp .45s cubic-bezier(.2,.7,.2,1)}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+  .hero{grid-column:1 / -1;max-width:640px}
+  .hero .eyebrow{
+    font-family:"JetBrains Mono",monospace;font-size:11px;
+    letter-spacing:.2em;text-transform:uppercase;color:var(--jade);
+    margin-bottom:24px;display:flex;align-items:center;gap:12px;
+  }
+  .hero .eyebrow::before{content:"";width:24px;height:1px;background:var(--jade)}
+  .hero h1{
+    font-family:"Fraunces",serif;font-weight:400;
+    font-size:clamp(40px,6vw,68px);line-height:1.02;letter-spacing:-.025em;
+    margin:0 0 28px;font-variation-settings:"opsz" 144;
+  }
+  .hero h1 em{font-style:italic;color:var(--gold);font-weight:400}
+  .hero .lede{font-size:17px;line-height:1.65;color:var(--ink);opacity:.85;max-width:560px}
+  .signed{margin-top:40px;padding-top:24px;border-top:1px solid var(--line);
+    display:flex;align-items:center;gap:14px;font-size:13px;color:var(--stone)}
+  .signed .who{font-family:"Fraunces",serif;font-style:italic;color:var(--ink);font-size:15px}
+
+  .qbody{max-width:560px}
+  .qlab{display:block;font-family:"Fraunces",serif;font-weight:400;
+    font-size:26px;line-height:1.25;letter-spacing:-.015em;
+    color:var(--ink);margin:0 0 20px;font-variation-settings:"opsz" 72}
+  .qeyebrow{font-family:"JetBrains Mono",monospace;font-size:11px;
+    letter-spacing:.22em;text-transform:uppercase;color:var(--jade);
+    margin:0 0 14px;display:flex;align-items:center;gap:12px}
+  .qeyebrow::before{content:"";width:20px;height:1px;background:var(--jade)}
+  .req{color:var(--clay);font-family:"JetBrains Mono",monospace;font-size:14px;vertical-align:super;margin-left:2px}
+
+  input[type=text],input[type=email],input[type=tel],textarea,select{
+    width:100%;-webkit-appearance:none;appearance:none;
+    background:#FBF6EA;border:1px solid var(--line);border-radius:3px;
+    padding:14px 16px;font-size:16px;font-family:inherit;color:var(--ink);
+    box-shadow:none;transition:border-color .18s, background .18s, box-shadow .18s;
+  }
+  textarea{min-height:120px;resize:vertical;line-height:1.5}
+  select{
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'><path d='M1 1l5 5 5-5' stroke='%237A6D5F' stroke-width='1.5' fill='none' stroke-linecap='round'/></svg>");
+    background-repeat:no-repeat;background-position:right 14px center;
+    padding-right:38px;cursor:pointer;
+  }
+  input:hover,textarea:hover,select:hover{border-color:var(--stone)}
+  input:focus,textarea:focus,select:focus{outline:none;border-color:var(--ink);background:#fff;box-shadow:0 0 0 3px rgba(196,138,44,.18)}
+  input::placeholder,textarea::placeholder{color:var(--stone);opacity:.6}
+
+  .phone-wrap{display:flex;align-items:stretch;background:#FBF6EA;border:1px solid var(--line);border-radius:3px;
+    transition:border-color .18s, background .18s, box-shadow .18s;overflow:hidden}
+  .phone-wrap:hover{border-color:var(--stone)}
+  .phone-wrap.focused{border-color:var(--ink);background:#fff;box-shadow:0 0 0 3px rgba(196,138,44,.18)}
+  .phone-wrap select.phone-dial{border:none;background:transparent;border-radius:0;
+    padding:14px 32px 14px 16px;font-family:"JetBrains Mono",monospace;font-size:15px;color:var(--ink);
+    background-position:right 10px center;box-shadow:none;flex-shrink:0;width:auto;min-width:110px;
+    border-right:1px solid var(--line)}
+  .phone-wrap select.phone-dial:focus{box-shadow:none;background:transparent}
+  .phone-wrap input.phone-num{border:none;background:transparent;border-radius:0;
+    padding:14px 16px;font-size:16px;flex:1;min-width:0;box-shadow:none}
+  .phone-wrap input.phone-num:focus{box-shadow:none;background:transparent}
+
+  .opts{display:flex;flex-direction:column;gap:2px;margin:0}
+  .opt{display:flex;align-items:flex-start;gap:14px;padding:14px 16px 14px 4px;cursor:pointer;
+    border-bottom:1px solid var(--line);transition:padding-left .18s ease, color .18s}
+  .opt:first-child{border-top:1px solid var(--line)}
+  .opt input{position:absolute;opacity:0;pointer-events:none}
+  .opt .mark{flex-shrink:0;width:18px;height:18px;border:1.5px solid var(--stone);
+    margin-top:3px;position:relative;transition:.18s}
+  .opt.radio-style .mark{border-radius:50%}
+  .opt .mark::after{content:"";position:absolute;inset:3px;background:var(--ink);
+    transform:scale(0);transition:transform .18s cubic-bezier(.5,1.6,.5,1)}
+  .opt.radio-style .mark::after{border-radius:50%}
+  .opt span.txt{flex:1;font-size:16px;line-height:1.4}
+  .opt:hover{padding-left:12px;color:var(--ink)}
+  .opt:hover .mark{border-color:var(--ink)}
+  .opt.checked .mark{border-color:var(--ink);background:transparent}
+  .opt.checked .mark::after{transform:scale(1)}
+  .opt.checked{padding-left:12px;background:linear-gradient(90deg,rgba(196,138,44,.08),transparent 60%)}
+  .opt-other-input{margin-left:12px;max-width:220px;font-size:14px;
+    border-bottom:1px solid var(--stone);padding:4px 2px}
+
+  .rank{display:flex;flex-direction:column;gap:20px}
+  .rank-row label{display:block;font-family:"JetBrains Mono",monospace;
+    font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);margin-bottom:8px}
+
+  .scale{display:flex;flex-direction:column;gap:6px}
+  .scale-legend{display:flex;justify-content:space-between;font-size:12px;color:var(--stone);
+    margin-bottom:16px;font-family:"JetBrains Mono",monospace;letter-spacing:.05em}
+  .scale-row{display:grid;grid-template-columns:1fr auto;gap:20px;
+    align-items:center;padding:14px 0;border-bottom:1px solid var(--line)}
+  .scale-row:first-child{border-top:1px solid var(--line)}
+  .scale-row .lbl{font-size:15px;line-height:1.35}
+  .scale-cells{display:flex;gap:6px}
+  .scale-cell{width:36px;height:36px;border:1.5px solid var(--line);border-radius:50%;
+    display:grid;place-items:center;cursor:pointer;transition:.18s;
+    font-family:"JetBrains Mono",monospace;font-size:12px;color:var(--stone);background:transparent}
+  .scale-cell input{position:absolute;opacity:0;pointer-events:none}
+  .scale-cell:hover{border-color:var(--ink);color:var(--ink)}
+  .scale-cell.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+
+  .nav{grid-column:2;display:flex;justify-content:space-between;align-items:center;gap:16px;
+    margin-top:48px;padding-top:24px;border-top:1px solid var(--line)}
+  .btn{border:none;background:none;font-family:inherit;font-size:14px;
+    cursor:pointer;padding:14px 24px;letter-spacing:.02em;transition:.18s;border-radius:2px}
+  .btn-primary{background:var(--ink);color:var(--paper);font-weight:500;
+    display:inline-flex;align-items:center;gap:10px}
+  .btn-primary:hover{background:var(--gold);color:var(--ink)}
+  .btn-primary .arr{transition:transform .18s}
+  .btn-primary:hover .arr{transform:translateX(4px)}
+  .btn-ghost{color:var(--stone);padding:14px 8px}
+  .btn-ghost:hover{color:var(--ink)}
+  .err-msg{display:none;color:var(--clay);font-size:13px;margin-top:12px;
+    font-family:"JetBrains Mono",monospace;letter-spacing:.02em}
+  .err-msg.on{display:block}
+  .qhint-max{font-size:12px;color:var(--stone);margin-top:10px;font-family:"JetBrains Mono",monospace;letter-spacing:.05em}
+
+  .end{grid-column:1 / -1;max-width:600px;padding:40px 0}
+  .end .mark-end{font-family:"Fraunces",serif;font-style:italic;color:var(--gold);
+    font-size:14px;letter-spacing:.06em;margin-bottom:16px}
+  .end h2{font-family:"Fraunces",serif;font-weight:400;
+    font-size:44px;line-height:1.05;letter-spacing:-.02em;margin:0 0 20px}
+  .end p{font-size:16px;line-height:1.65;color:var(--ink);opacity:.8;max-width:520px}
+  .end details{margin-top:32px}
+  .end summary{cursor:pointer;color:var(--stone);font-size:13px;font-family:"JetBrains Mono",monospace;letter-spacing:.05em}
+  .end pre{background:rgba(0,0,0,.04);padding:16px;border-radius:2px;overflow:auto;font-size:12px;margin-top:12px}
+
+  .start-btn{margin-top:44px}
+
+  @media (max-width:720px){
+    .wrap{padding:32px 20px 100px}
+    .card{grid-template-columns:1fr;gap:24px}
+    .qbody{max-width:100%}
+    .qlab{font-size:22px}
+    .nav{grid-column:1}
+    .scale-row{grid-template-columns:1fr;gap:10px}
+    .scale-cells{justify-content:space-between}
+    .scale-cell{width:44px;height:44px}
+    .hero h1{font-size:38px}
+  }
+</style>
+</head>
+<body>
+<nav class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">
+      <a href="/" class="mark serif" style="color:inherit;text-decoration:none">CAJAYNI</a>
+      <span class="divider"></span>
+      <span class="sub">Postulación</span>
+    </div>
+  </div>
+  <div class="progress"><div id="pbar"></div></div>
+</nav>
+<main class="wrap">
+  <form id="survey" novalidate></form>
+</main>
+
+<script>
+const DEPTOS = ["Amazonas","Áncash","Apurímac","Arequipa","Ayacucho","Cajamarca","Callao","Cusco","Huancavelica","Huánuco","Ica","Junín","La Libertad","Lambayeque","Lima","Loreto","Madre de Dios","Moquegua","Pasco","Piura","Puno","San Martín","Tacna","Tumbes","Ucayali","Resido fuera del Perú"];
+const COUNTRY_CODES = [
+  {c:"PE", name:"Perú", dial:"+51"},{c:"AR", name:"Argentina", dial:"+54"},{c:"BO", name:"Bolivia", dial:"+591"},
+  {c:"BR", name:"Brasil", dial:"+55"},{c:"CA", name:"Canadá", dial:"+1"},{c:"CL", name:"Chile", dial:"+56"},
+  {c:"CO", name:"Colombia", dial:"+57"},{c:"CR", name:"Costa Rica", dial:"+506"},{c:"CU", name:"Cuba", dial:"+53"},
+  {c:"DO", name:"Rep. Dominicana", dial:"+1"},{c:"EC", name:"Ecuador", dial:"+593"},{c:"SV", name:"El Salvador", dial:"+503"},
+  {c:"ES", name:"España", dial:"+34"},{c:"US", name:"Estados Unidos", dial:"+1"},{c:"FR", name:"Francia", dial:"+33"},
+  {c:"GT", name:"Guatemala", dial:"+502"},{c:"HN", name:"Honduras", dial:"+504"},{c:"IT", name:"Italia", dial:"+39"},
+  {c:"MX", name:"México", dial:"+52"},{c:"NI", name:"Nicaragua", dial:"+505"},{c:"PA", name:"Panamá", dial:"+507"},
+  {c:"PY", name:"Paraguay", dial:"+595"},{c:"PT", name:"Portugal", dial:"+351"},{c:"GB", name:"Reino Unido", dial:"+44"},
+  {c:"DE", name:"Alemania", dial:"+49"},{c:"UY", name:"Uruguay", dial:"+598"},{c:"VE", name:"Venezuela", dial:"+58"},
+];
+const SECTORES = ["Agroindustria","Alimentos y Bebidas Procesados","Gastronomía, Hotelería y Turismo","Textil, Confecciones y Moda","Retail, Comercio Minorista y Distribución","Tecnología, Software y Servicios Digitales","Servicios Profesionales (Consultoría, Legal, Gestión Humana)","Construcción, Infraestructura y Acabados","Logística, Transporte y Última Milla","Manufactura Ligera y Metalmecánica","Salud, Bienestar y Estética","Servicios Auxiliares para Minería e Industria","Otro"];
+const AREAS_22 = ["Finanzas, costos y fijación de precios","Ventas y adquisición de clientes","Marketing, marca y contenido","Operaciones y cadena de suministro","Gestión de equipo y liderazgo","Estrategia y visión de largo plazo","Tecnología y automatización"];
+const DESAFIOS_20 = ["Ausencia de un plan estratégico claro y formalizado","Finanzas desordenadas: no sé bien dónde se va el dinero ni cómo fijar precios","Dificultad para conseguir nuevos clientes / ventas bajas","Competencia de grandes marcas que asfixian mi negocio","Baja rentabilidad o altos costos operativos","Falta de liquidez o problemas de flujo de caja","No sé cómo delegar ni profesionalizar mi negocio","Necesidad de introducir tecnología para optimizar el negocio","Gestión del equipo y falta de talento clave","Otro"];
+
+const STEPS = [
+  { type:"intro", id:"welcome", title:"¡Hola!",
+    body:`Esta comunidad creada por el <b>Patronato Pikimachay</b> y presidida por <b>Carlos Añaños Jerí</b>, nace para acompañarte, tú que mueves y aceleras los motores productivos del Perú con hambre de salir adelante por ti y los tuyos.<br><br>Tus respuestas nos permitirán conocerte de verdad y así podremos ayudarte y conectarte con los mejores recursos, cursos y mentores.<br><br>Valoramos tu honestidad: no premiamos títulos ni facturación, premiamos las ganas y a la gente chambeadora.` },
+  { type:"text",  id:"q1",  label:"Nombre completo", required:true, minLen:3, placeholder:"Nombres y apellidos" },
+  { type:"text",  id:"q2",  label:"Número de DNI o Carné de Extranjería", required:true,
+    inputmode:"numeric", pattern:"^[0-9]{8,12}$", maxLen:12, placeholder:"8 a 12 dígitos",
+    errMsg:"Ingresa solo números (DNI 8 dígitos · CE hasta 12)." },
+  { type:"radio", id:"q3",  label:"Nacionalidad", required:true, options:["Peruana","Extranjera, resido en Perú","Extranjera, resido fuera de Perú"] },
+  { type:"select",id:"q4",  label:"Región donde operas principalmente", required:true, options:DEPTOS },
+  { type:"text",  id:"q5",  label:"Distrito", required:true, placeholder:"Ej. Miraflores" },
+  { type:"phone", id:"q6",  label:"Número de celular (WhatsApp)", required:true, defaultDial:"+51",
+    errMsg:"Ingresa un número válido (solo dígitos, entre 6 y 15)." },
+  { type:"email", id:"q7",  label:"Correo electrónico", required:true,
+    pattern:"^[^\\s@]+@[^\\s@]+\\.[^\\s@]{2,}$", placeholder:"tu@correo.com",
+    errMsg:"Ingresa un correo válido (ej. nombre@dominio.com)." },
+  { type:"radio", id:"q8",  label:"¿Cuál es tu situación?", required:true, options:["Quiero emprender, nunca lo he hecho","Emprendí antes, actualmente no emprendo","Estoy emprendiendo actualmente"] },
+  { type:"radio", id:"q9",
+    label:"¿Tu emprendimiento opera en el Perú o aporta al Perú desde el exterior?",
+    labelPast:"¿Tu emprendimiento operaba en el Perú o aportaba al Perú desde el exterior?",
+    required:true,
+    options:["Sí, en el Perú","Sí, desde el exterior (exporto productos peruanos, empleo peruanos o represento lo peruano)","No, ni en Perú ni aportando desde afuera"] },
+  { type:"textarea", id:"q10", label:"Si aportas al Perú desde el exterior, cuéntanos brevemente cómo",
+    showIf: a => a.q9 === "Sí, desde el exterior (exporto productos peruanos, empleo peruanos o represento lo peruano)" },
+  { type:"text",  id:"q11", label:"¿Cómo se llama tu emprendimiento?", labelPast:"¿Cómo se llamaba tu emprendimiento?", required:true },
+  { type:"radioOther", id:"q12", label:"Sector de operación (actividad principal)", required:true, options:SECTORES },
+  { type:"radio", id:"q13", label:"¿Cuál es tu situación de ventas?", required:true,
+    options:["Tengo ventas constantes mes a mes","Tengo algunos meses sin vender"],
+    showIf: a => a.q8 !== "Emprendí antes, actualmente no emprendo" },
+  { type:"radio", id:"q14", label:"Tiempo de operación en el mercado", required:true, options:["Menos de 1 año","De 1 a 3 años","De 3 a 5 años","De 5 a 10 años","Más de 10 años"] },
+  { type:"radio", id:"q15", label:"Nivel de facturación anual aproximado (USD) — opcional", options:["Menos de $50,000","$50,000 a $200,000","$200,000 a $1,000,000","Más de $1,000,000","Prefiero no responder"] },
+  { type:"radio", id:"q16", label:"Número de colaboradores", required:true, options:["De 1 a 5 colaboradores","De 5 a 10 colaboradores","De 10 a 20 colaboradores","Más de 20 colaboradores"] },
+  { type:"radio", id:"q17",
+    label:"¿Cuántos de tus colaboradores son familia directa?",
+    labelPast:"¿Cuántos de tus colaboradores eran familia directa?",
+    required:true,
+    options:["Ninguno","Entre 1 y 3","Más de 3","Negocio 100% familiar"] },
+  { type:"radio", id:"q18_producto", required:true, eyebrow:"1 de 5 · Producto",
+    label:"¿Qué sientes que le falta a tu producto o servicio?",
+    labelPast:"¿Qué sentías que le faltaba a tu producto o servicio?",
+    options:["Mejorar la calidad o presentación","Definir mejor qué me hace diferente de la competencia","Tener variedad o nuevas versiones para vender más","Recoger y usar opiniones de mis clientes para mejorarlo continuamente","No sabría decir, necesito orientación en esto"] },
+  { type:"radio", id:"q18_precio", required:true, eyebrow:"2 de 5 · Precio",
+    label:"¿Qué sientes que le falta a tu negocio en cuanto a precios?",
+    labelPast:"¿Qué sentías que le faltaba a tu negocio en cuanto a precios?",
+    options:["Saber cuánto me cuesta realmente producir o vender","Definir un precio que me deje ganancia clara","Comparar mis precios con los de la competencia","Usar promociones y ajustes de precio de forma estratégica sin perder rentabilidad","No sabría decir, necesito orientación en esto"] },
+  { type:"radio", id:"q18_plaza", required:true, eyebrow:"3 de 5 · Plaza",
+    label:"¿Qué sientes que le falta a tu negocio para llegar a más clientes?",
+    labelPast:"¿Qué sentías que le faltaba a tu negocio para llegar a más clientes?",
+    options:["Tener un local o punto de venta mejor ubicado","Vender por internet o redes sociales","Mejorar la entrega o distribución de mis productos","Llegar a otras ciudades o zonas de forma organizada","No sabría decir, necesito orientación en esto"] },
+  { type:"radio", id:"q18_promocion", required:true, eyebrow:"4 de 5 · Promoción",
+    label:"¿Qué sientes que le falta a tu negocio para darse a conocer?",
+    labelPast:"¿Qué sentías que le faltaba a tu negocio para darse a conocer?",
+    options:["Tener presencia en redes sociales","Saber cómo atraer más clientes","Hacer publicidad sin gastar de más","Crear una marca reconocible con una estrategia clara de promoción","No sabría decir, necesito orientación en esto"] },
+  { type:"radio", id:"q18_personas", required:true, eyebrow:"5 de 5 · Personas",
+    label:"¿Qué sientes que le falta a tu negocio en cuanto a personas?",
+    labelPast:"¿Qué sentías que le faltaba a tu negocio en cuanto a personas?",
+    options:["Tener un equipo o personal de apoyo","Atender y fidelizar mejor a mis clientes","Capacitar o motivar a quienes trabajan conmigo","Definir roles y funciones claras para que el negocio funcione sin depender solo de mí","No sabría decir, necesito orientación en esto"] },
+  { type:"radio", id:"q19", label:"¿Ahora mismo puedes dedicar tiempo a seguir una mentoría más personalizada?", required:true, options:["Sí","No"] },
+  { type:"textarea", id:"q19b", label:"¿Por qué te gustaría una mentoría personalizada?", required:true, showIf: a => a.q19 === "Sí" },
+  { type:"rank12", id:"q20", label:"¿Cuál es hoy el desafío MÁS crítico de tu negocio? (elige tu #1 y tu #2)", options:DESAFIOS_20, hasOther:true,
+    showIf: a => a.q19 === "Sí" && a.q8 === "Estoy emprendiendo actualmente" && count5PsNoSe(a) < 3 },
+  { type:"checkboxMax", id:"q21", label:"¿Qué recursos o apoyos necesitas con mayor urgencia hoy? (máximo 2)", max:2, hasOther:true,
+    options:["Incorporar un socio estratégico o inversionista","Aprender a gestionar mejor mi negocio","Quiero aprender a levantar capital","Acompañamiento profesional (consultoría o mentoring continuo)","Introducir nuevas tecnologías y automatización","Redes de contacto para acceso a nuevos mercados","Otro"],
+    showIf: a => a.q19 === "Sí" && a.q8 === "Estoy emprendiendo actualmente" && count5PsNoSe(a) < 3 },
+  { type:"scale5", id:"q22", label:"Del 1 al 5, ¿qué tan sólido te sientes en cada área? (1 = muy débil / 5 = fortaleza)", rows:AREAS_22,
+    showIf: a => a.q19 === "Sí" && a.q8 === "Estoy emprendiendo actualmente" && count5PsNoSe(a) < 3 },
+  { type:"radio", id:"q23", label:"¿A qué tipo de cliente le vendes principalmente?",
+    options:["Consumidor final de sectores B, C, D o E (base de la pirámide)","Consumidor final de sectores A / premium","Otras empresas (B2B)","Instituciones o Estado","Mixto"],
+    showIf: a => a.q19 === "Sí" && a.q8 === "Estoy emprendiendo actualmente" && count5PsNoSe(a) < 3 },
+  { type:"radio", id:"q24", label:"¿Cuál de estas situaciones se parece más a la tuya hoy? (elige 1)",
+    options:["Vendo un producto físico y quiero bajar costos para competir en precio y escalar","Ya vendo y tengo tracción, pero mis finanzas y márgenes son un desorden","Una marca grande o competidor fuerte me está asfixiando y no sé cómo defenderme","Mi emprendimiento creció \"a pulso\" y me consume; necesito delegar y profesionalizar","Estoy empezando y necesito ordenar lo básico antes de crecer","Ya estoy sólido y busco expandirme o internacionalizarme"],
+    showIf: a => a.q19 === "Sí" && a.q8 === "Estoy emprendiendo actualmente" && count5PsNoSe(a) < 3 },
+  { type:"radio", id:"q25c", label:"¿En qué canal necesitas más ayuda para vender?",
+    options:["Venta presencial / punto físico","Redes sociales y contenido","E-commerce / tienda online","Distribución mayorista / bodegas / retail","Ventas corporativas (B2B)","No tengo claro mi canal aún"],
+    showIf: a => a.q19 === "Sí" && a.q8 === "Estoy emprendiendo actualmente" && count5PsNoSe(a) < 3 },
+  { type:"radio", id:"q26", label:"¿En qué etapa sientes que está tu negocio ahora mismo?",
+    options:["Sobrevivencia: apenas cubro costos mes a mes","Estabilidad: tengo ingresos constantes pero no logro crecer","Crecimiento: estoy creciendo y quiero acelerar","Expansión: busco nuevos mercados o escalar fuerte"],
+    showIf: a => a.q19 === "Sí" && a.q8 === "Estoy emprendiendo actualmente" && count5PsNoSe(a) < 3 },
+  { type:"textarea", id:"q25", label:"Si un mentor te diera 1 hora de su tiempo, ¿qué problema concreto le pondrías sobre la mesa?", required:true,
+    showIf: a => (a.q26||"").startsWith("Crecimiento") || (a.q26||"").startsWith("Expansión") },
+  { type:"radio", id:"q27", label:"¿Prefieres un mentor que domine tu RUBRO o el ÁREA en la que estás atascado?",
+    options:["Prefiero que conozca mi rubro a fondo","Prefiero que domine el área/problema, aunque sea de otro rubro","Me da igual, confío en la recomendación del equipo"],
+    showIf: a => (a.q26||"").startsWith("Crecimiento") || (a.q26||"").startsWith("Expansión") },
+  { type:"radio", id:"q28", label:"Si tu negocio genera utilidad este año, ¿qué harías con la mayor parte?",
+    options:["Reinvertirla para crecer","Mitad reinvertir, mitad retirar","Retirarla para mejorar mi calidad de vida"],
+    showIf: a => (a.q26||"").startsWith("Crecimiento") || (a.q26||"").startsWith("Expansión") },
+  { type:"textarea", id:"q29", label:"En una o dos frases: ¿por qué haces empresa? ¿Qué te mueve?", required:true,
+    showIf: a => (a.q26||"").startsWith("Crecimiento") || (a.q26||"").startsWith("Expansión") },
+  { type:"textarea", id:"q30", label:"Cuéntanos un momento difícil que superaste en tu emprendimiento (opcional)",
+    showIf: a => (a.q26||"").startsWith("Crecimiento") || (a.q26||"").startsWith("Expansión") },
+];
+
+const answers = {};
+let idx = 0;
+const form = document.getElementById("survey");
+form.addEventListener("submit", e => e.preventDefault());
+form.addEventListener("keydown", e => {
+  if(e.key === "Enter" && e.target.tagName !== "TEXTAREA"){
+    e.preventDefault();
+    const s = STEPS[idx];
+    if(s) advance(s);
+  }
+});
+const pbar = document.getElementById("pbar");
+
+function isPast(){ return answers.q8 === "Emprendí antes, actualmente no emprendo"; }
+function endEarly(){ return answers.q8 === "Quiero emprender, nunca lo he hecho"; }
+function count5PsNoSe(a){
+  const keys = ["q18_producto","q18_precio","q18_plaza","q18_promocion","q18_personas"];
+  const NOSE = "No sabría decir, necesito orientación en esto";
+  return keys.filter(k => a[k] === NOSE).length;
+}
+function nextIdx(from){ for(let i=from;i<STEPS.length;i++){ const s = STEPS[i]; if(s.showIf && !s.showIf(answers)) continue; return i;} return -1; }
+function prevIdx(from){ for(let i=from;i>=0;i--){ const s = STEPS[i]; if(s.showIf && !s.showIf(answers)) continue; return i;} return -1; }
+function questionIndex(){
+  let seen=0, total=0, mine=0;
+  for(let i=0;i<STEPS.length;i++){
+    const s=STEPS[i];
+    if(s.type==="intro"||s.type==="section") continue;
+    if(s.showIf && !s.showIf(answers)) continue;
+    total++;
+    if(i<=idx) seen++;
+    if(i===idx) mine=seen;
+  }
+  return {mine, total};
+}
+
+function render(){
+  const s = STEPS[idx];
+  form.innerHTML = "";
+  const card = document.createElement("div");
+  card.className = "card";
+  if(s.type === "intro"){
+    card.innerHTML = `<div class="hero">
+      <div class="eyebrow">Patronato Pikimachay · Comunidad</div>
+      <h1>Nos interesa <em>quién eres</em>, no cuánto facturas.</h1>
+      <p class="lede">${s.body}</p>
+      <button type="button" class="btn btn-primary start-btn" id="next">Comenzar <span class="arr">→</span></button>
+      <div class="signed"><span>Presidida por</span><span class="who">Carlos Añaños Jerí</span></div>
+    </div>`;
+  } else {
+    const lbl = (isPast() && s.labelPast) ? s.labelPast : s.label;
+    card.innerHTML = `<div class="qbody">
+      ${s.eyebrow ? `<div class="qeyebrow">${s.eyebrow}</div>` : ''}
+      <label class="qlab">${lbl}${s.required?'<span class="req">*</span>':''}</label>
+      ${renderInput(s)}
+      <div class="err-msg" id="err">Necesitamos tu respuesta para continuar.</div>
+    </div>`;
+    const nav = document.createElement("div");
+    nav.className = "nav";
+    const back = idx>0 ? `<button type="button" class="btn btn-ghost" id="back">← Atrás</button>` : `<span></span>`;
+    const isLast = nextIdx(idx+1) === -1;
+    nav.innerHTML = back + `<button type="button" class="btn btn-primary" id="next">${isLast?'Enviar respuestas':'Continuar'} <span class="arr">→</span></button>`;
+    card.appendChild(nav);
+  }
+  form.appendChild(card);
+  attachHandlers(s);
+  if(s.type==="rank12"){
+    const v=answers[s.id]||["",""];
+    [1,2].forEach(slot => {
+      const raw = v[slot-1] || "";
+      const isOther = typeof raw === "string" && raw.startsWith("Otro");
+      const sel = document.getElementById("r"+slot);
+      if(sel) sel.value = isOther ? "Otro" : raw;
+      const ob = document.getElementById("other-block-"+slot);
+      if(ob) ob.style.display = isOther ? "block" : "none";
+      const inp = document.getElementById("other-"+slot);
+      if(inp && raw.startsWith("Otro: ")) inp.value = raw.slice(6);
+    });
+  }
+  const nb = document.getElementById("next"); if(nb) nb.onclick = ()=>advance(s);
+  const bb = document.getElementById("back"); if(bb) bb.onclick = ()=>goBack();
+  const {mine:m2, total:t2} = questionIndex();
+  const pct = s.type==="intro" ? 0 : Math.round((m2/t2)*100);
+  pbar.style.width = pct+"%";
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function renderInput(s){
+  const v = answers[s.id];
+  switch(s.type){
+    case "text": case "tel": case "email": {
+      const attrs = [
+        `type="${s.type}"`, `id="in"`, `value="${escapeAttr(v||'')}"`,
+        s.placeholder ? `placeholder="${escapeAttr(s.placeholder)}"` : "",
+        s.inputmode ? `inputmode="${s.inputmode}"` : "",
+        s.pattern ? `pattern="${escapeAttr(s.pattern)}"` : "",
+        s.maxLen ? `maxlength="${s.maxLen}"` : "",
+        s.type === "email" ? `autocomplete="email"` : "",
+        s.type === "tel" ? `autocomplete="tel"` : "",
+      ].filter(Boolean).join(" ");
+      return `<input ${attrs}>`;
+    }
+    case "textarea": return `<textarea id="in" ${s.placeholder?`placeholder="${escapeAttr(s.placeholder)}"`:""}>${v||''}</textarea>`;
+    case "phone": {
+      let curDial = s.defaultDial || "+51", curNum = "";
+      if(v && typeof v === "object"){ curDial = v.dial || curDial; curNum = v.num || ""; }
+      else if(typeof v === "string" && v){
+        const m = v.match(/^(\+\d{1,4})\s?(.*)$/); if(m){ curDial = m[1]; curNum = m[2]; } else { curNum = v; }
+      }
+      const opts = COUNTRY_CODES.map(cc => `<option value="${cc.dial}" ${cc.dial===curDial?'selected':''}>${cc.c} ${cc.dial}</option>`).join("");
+      return `<div class="phone-wrap" id="phone-wrap">
+        <select id="dial" class="phone-dial">${opts}</select>
+        <input type="tel" id="num" class="phone-num" inputmode="tel" autocomplete="tel-national" value="${escapeAttr(curNum)}" placeholder="9XX XXX XXX" maxlength="15">
+      </div>`;
+    }
+    case "select":
+      return `<select id="in"><option value="">Selecciona...</option>`+
+        s.options.map(o=>`<option ${v===o?'selected':''}>${o}</option>`).join('')+`</select>`;
+    case "radio":
+      return `<div class="opts">`+s.options.map(o=>`
+        <label class="opt radio-style ${v===o?'checked':''}"><input type="radio" name="${s.id}" value="${escapeAttr(o)}" ${v===o?'checked':''}><span class="mark"></span><span class="txt">${o}</span></label>`).join('')+`</div>`;
+    case "radioOther":{
+      const isOther = v && !s.options.slice(0,-1).includes(v) && v !== "Otro";
+      const checkedOther = isOther || v === "Otro";
+      return `<div class="opts">`+s.options.map(o=>{
+        if(o==="Otro"){
+          return `<label class="opt radio-style ${checkedOther?'checked':''}"><input type="radio" name="${s.id}" value="Otro" ${checkedOther?'checked':''}><span class="mark"></span><span class="txt">Otro <input type="text" id="other" class="opt-other-input" placeholder="especifica" value="${isOther?escapeAttr(v):''}"></span></label>`;
+        }
+        return `<label class="opt radio-style ${v===o?'checked':''}"><input type="radio" name="${s.id}" value="${escapeAttr(o)}" ${v===o?'checked':''}><span class="mark"></span><span class="txt">${o}</span></label>`;
+      }).join('')+`</div>`;
+    }
+    case "checkbox":{
+      const arr = v||[];
+      return `<div class="opts">`+s.options.map(o=>`
+        <label class="opt ${arr.includes(o)?'checked':''}"><input type="checkbox" name="${s.id}" value="${escapeAttr(o)}" ${arr.includes(o)?'checked':''}><span class="mark"></span><span class="txt">${o}</span></label>`).join('')+`</div>`;
+    }
+    case "checkboxMax":{
+      const arr = v||[];
+      const otroItem = arr.find(x => typeof x === "string" && (x === "Otro" || x.startsWith("Otro: ")));
+      const otroChecked = !!otroItem;
+      const otroText = otroItem && otroItem.startsWith("Otro: ") ? otroItem.slice(6) : "";
+      return `<div class="opts" data-max="${s.max}">`+s.options.map(o=>{
+        const isOtroOpt = o === "Otro" && s.hasOther;
+        const checked = isOtroOpt ? otroChecked : arr.includes(o);
+        return `<label class="opt ${checked?'checked':''}">
+          <input type="checkbox" name="${s.id}" value="${escapeAttr(o)}" ${checked?'checked':''} ${isOtroOpt?'data-other="1"':''}>
+          <span class="mark"></span><span class="txt">${o}</span></label>`;
+      }).join('')
+      + (s.hasOther ? `<div id="other-block" style="margin-top:12px;${otroChecked?'':'display:none'}"><input type="text" id="other" placeholder="Especifica" value="${escapeAttr(otroText)}"></div>` : '')
+      + `</div><div class="qhint-max">Máximo ${s.max} selecciones</div>`;
+    }
+    case "rank12":{
+      const opt = s.options.map(o=>`<option value="${escapeAttr(o)}">${o}</option>`).join('');
+      const otherRow = (slot, val) => s.hasOther ? `
+        <div id="other-block-${slot}" style="margin-top:10px;${(val && val.startsWith("Otro: "))?'':'display:none'}">
+          <input type="text" id="other-${slot}" placeholder="Especifica" value="${escapeAttr(val && val.startsWith("Otro: ") ? val.slice(6) : "")}">
+        </div>` : '';
+      return `<div class="rank">
+        <div class="rank-row"><label>Prioridad 01 — la más crítica</label>
+          <select id="r1"><option value="">Selecciona…</option>${opt}</select>${otherRow(1, "")}</div>
+        <div class="rank-row"><label>Prioridad 02</label>
+          <select id="r2"><option value="">Selecciona…</option>${opt}</select>${otherRow(2, "")}</div>
+      </div>`;
+    }
+    case "scale5":{
+      const cur = v||{};
+      let html = `<div class="scale"><div class="scale-legend"><span>1 · muy débil</span><span>5 · fortaleza</span></div>`;
+      s.rows.forEach((r,ri)=>{
+        html += `<div class="scale-row"><div class="lbl">${r}</div><div class="scale-cells">`;
+        for(let n=1;n<=5;n++){
+          const on = cur[r]==n ? 'on' : '';
+          html += `<label class="scale-cell ${on}"><input type="radio" name="scale_${ri}" value="${n}" ${on?'checked':''}>${n}</label>`;
+        }
+        html += `</div></div>`;
+      });
+      html += `</div>`;
+      return html;
+    }
+  }
+  return "";
+}
+
+function attachHandlers(s){
+  form.querySelectorAll(".opt input").forEach(inp=>{
+    inp.addEventListener("change", ()=>{
+      const container = inp.closest(".opts");
+      if(inp.type==="radio"){
+        container.querySelectorAll(".opt").forEach(o=>o.classList.remove("checked"));
+        inp.closest(".opt").classList.add("checked");
+      } else {
+        inp.closest(".opt").classList.toggle("checked", inp.checked);
+        const max = parseInt(container.dataset.max||"0");
+        if(max){
+          const checked = container.querySelectorAll("input:checked");
+          if(checked.length > max){ inp.checked = false; inp.closest(".opt").classList.remove("checked"); }
+        }
+      }
+    });
+  });
+  const selEl = form.querySelector('select#in');
+  const otherBlock = form.querySelector('#other-block');
+  if(selEl && otherBlock && s.type === "selectOther"){
+    selEl.addEventListener('change', () => {
+      const show = selEl.value === '__other__';
+      otherBlock.style.display = show ? 'block' : 'none';
+      if(show) setTimeout(() => document.getElementById('other')?.focus(), 30);
+    });
+  }
+  if(s.type === "checkboxMax" && s.hasOther){
+    const otroCk = form.querySelector('input[data-other="1"]');
+    const ob = form.querySelector('#other-block');
+    if(otroCk && ob){
+      otroCk.addEventListener('change', () => {
+        ob.style.display = otroCk.checked ? 'block' : 'none';
+        if(otroCk.checked) setTimeout(() => document.getElementById('other')?.focus(), 30);
+      });
+    }
+  }
+  if(s.type === "rank12" && s.hasOther){
+    [1,2].forEach(slot => {
+      const sel = document.getElementById("r"+slot);
+      const ob = document.getElementById("other-block-"+slot);
+      if(sel && ob){
+        sel.addEventListener('change', () => {
+          const show = sel.value === "Otro";
+          ob.style.display = show ? 'block' : 'none';
+          if(show) setTimeout(() => document.getElementById('other-'+slot)?.focus(), 30);
+        });
+      }
+    });
+  }
+  const pw = document.getElementById("phone-wrap");
+  if(pw){
+    pw.querySelectorAll("select,input").forEach(el=>{
+      el.addEventListener("focus", ()=>pw.classList.add("focused"));
+      el.addEventListener("blur", ()=>pw.classList.remove("focused"));
+    });
+  }
+  form.querySelectorAll(".scale-cell input").forEach(inp=>{
+    inp.addEventListener("change", ()=>{
+      const row = inp.closest(".scale-row");
+      row.querySelectorAll(".scale-cell").forEach(c=>c.classList.remove("on"));
+      inp.closest(".scale-cell").classList.add("on");
+    });
+  });
+}
+
+function collect(s){
+  switch(s.type){
+    case "text": case "tel": case "email":
+    case "textarea": case "select":
+      return document.getElementById("in").value.trim();
+    case "phone": {
+      const dial = document.getElementById("dial").value;
+      const num = document.getElementById("num").value.replace(/\s+/g," ").trim();
+      return { dial, num, display: num ? `${dial} ${num}` : "" };
+    }
+    case "radio":{ const r = form.querySelector(`input[name="${s.id}"]:checked`); return r ? r.value : ""; }
+    case "radioOther":{
+      const r = form.querySelector(`input[name="${s.id}"]:checked`);
+      if(!r) return "";
+      if(r.value === "Otro"){ const o = document.getElementById("other").value.trim(); return o || "Otro"; }
+      return r.value;
+    }
+    case "checkbox": case "checkboxMax":{
+      const vals = Array.from(form.querySelectorAll(`input[name="${s.id}"]:checked`)).map(i=>i.value);
+      if(s.hasOther && vals.includes("Otro")){
+        const otherEl = document.getElementById("other");
+        const t = otherEl ? otherEl.value.trim() : "";
+        return vals.map(x => x === "Otro" ? (t ? `Otro: ${t}` : "Otro") : x);
+      }
+      return vals;
+    }
+    case "rank12":{
+      const readSlot = (slot) => {
+        const val = document.getElementById("r"+slot).value;
+        if(val === "Otro" && s.hasOther){
+          const t = (document.getElementById("other-"+slot)?.value || "").trim();
+          return t ? `Otro: ${t}` : "Otro";
+        }
+        return val;
+      };
+      return [readSlot(1), readSlot(2)];
+    }
+    case "scale5":{
+      const out = {};
+      s.rows.forEach((r,ri)=>{
+        const sel = form.querySelector(`input[name="scale_${ri}"]:checked`);
+        if(sel) out[r] = parseInt(sel.value);
+      });
+      return out;
+    }
+  }
+}
+
+function validate(s, val){
+  if(s.type==="intro"||s.type==="section") return {ok:true};
+  if(s.type==="phone"){
+    const digits = (val && val.num ? val.num.replace(/\D/g,"") : "");
+    if(s.required && !digits) return {ok:false, msg:"Ingresa tu número de celular."};
+    if(digits && (digits.length < 6 || digits.length > 15)) return {ok:false, msg: s.errMsg || "Número inválido."};
+    if(val.dial === "+51" && digits && !/^9\d{8}$/.test(digits))
+      return {ok:false, msg:"Un celular peruano tiene 9 dígitos y empieza en 9."};
+    return {ok:true};
+  }
+  const empty = Array.isArray(val) ? val.filter(Boolean).length===0
+              : (typeof val === "object" && val !== null) ? Object.keys(val).length===0
+              : !(val && String(val).trim());
+  if(s.required && empty) return {ok:false, msg:"Necesitamos tu respuesta para continuar."};
+  if(empty) return {ok:true};
+  if(s.type==="rank12"){
+    const [a,b] = val;
+    if(s.required && (!a || !b)) return {ok:false, msg:"Selecciona tu #1 y tu #2."};
+    if(a && b && a===b) return {ok:false, msg:"El #1 y el #2 deben ser distintos."};
+  }
+  if(s.type==="scale5" && s.required){
+    if(Object.keys(val).length !== s.rows.length) return {ok:false, msg:"Califica todas las áreas antes de continuar."};
+  }
+  if(s.type==="checkboxMax" && s.max && val.length > s.max){
+    return {ok:false, msg:`Selecciona máximo ${s.max} opciones.`};
+  }
+  if(s.pattern && typeof val === "string" && val){
+    const re = new RegExp(s.pattern);
+    if(!re.test(val)) return {ok:false, msg: s.errMsg || "Formato inválido."};
+  }
+  if(s.minLen && typeof val === "string" && val.trim().length < s.minLen){
+    return {ok:false, msg:`Debe tener al menos ${s.minLen} caracteres.`};
+  }
+  return {ok:true};
+}
+
+function advance(s){
+  if(s.type!=="intro" && s.type!=="section"){
+    const val = collect(s);
+    const check = validate(s,val);
+    if(!check.ok){
+      const err = document.getElementById("err");
+      err.textContent = check.msg;
+      err.classList.add("on");
+      return;
+    }
+    answers[s.id] = val;
+  }
+  if(s.id === "q8" && endEarly()){
+    return renderEnd("¡Gracias por tu interés!","Registramos tu contacto. Te avisaremos cuando tengamos contenido y programas para quienes están dando el primer paso hacia el emprendimiento.");
+  }
+  if(s.id === "q18_personas" && count5PsNoSe(answers) >= 3){
+    return renderEnd("¡Gracias por completar la encuesta!","Tus respuestas nos ayudarán a diseñar contenido y programas de acompañamiento inicial pensados justo para tu momento. Nos pondremos en contacto pronto por WhatsApp o correo.");
+  }
+  const ni = nextIdx(idx+1);
+  if(ni === -1){ return submit(); }
+  idx = ni;
+  render();
+}
+
+function goBack(){ const pi = prevIdx(idx-1); if(pi>=0){ idx = pi; render(); } }
+
+const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbyLAcfXuFqrj3fMQIU8J1ih9dWNEvZ6fMvO1aR9lgbWkmBQ-thts5nJA0hCZm4IMPuuJw/exec";
+
+function submit(){
+  try{ localStorage.setItem("cajayni_encuesta", JSON.stringify({at:new Date().toISOString(),answers})); }catch(e){}
+  renderSending();
+  fetch(WEBHOOK_URL, {
+    method: "POST", mode: "cors",
+    headers: { "Content-Type": "text/plain;charset=utf-8" },
+    body: JSON.stringify({ ...answers, _submittedAt: new Date().toISOString() }),
+    keepalive: true,
+  }).then(r => r.text()).then(() => {
+    renderEnd("¡Gracias por completar la encuesta!","Tus respuestas nos permitirán conectarte con los mentores, recursos y programas que mejor calzan con tu momento. Nos pondremos en contacto contigo pronto por WhatsApp o correo.");
+  }).catch(err => {
+    console.error("Error enviando a Sheet:", err);
+    renderEnd("¡Gracias por completar la encuesta!","Tus respuestas quedaron registradas. Si no ves confirmación por WhatsApp o correo en las próximas horas, escríbenos.");
+  });
+}
+
+function renderSending(){
+  pbar.style.width="100%";
+  form.innerHTML = `<div class="card"><div class="end">
+    <div class="mark-end">— Enviando —</div>
+    <h2>Guardando tus respuestas…</h2>
+    <p>Un momento, estamos registrando tu perfil en la base de la comunidad.</p>
+  </div></div>`;
+}
+function renderEnd(title, body){
+  pbar.style.width="100%";
+  form.innerHTML = `<div class="card"><div class="end">
+    <div class="mark-end">— Fin del formulario —</div>
+    <h2>${title}</h2>
+    <p>${body}</p>
+    <details><summary>Ver mis respuestas</summary>
+      <pre>${escapeHtml(JSON.stringify(answers,null,2))}</pre>
+    </details>
+  </div></div>`;
+}
+function escapeAttr(s){ return String(s).replace(/"/g,'&quot;'); }
+function escapeHtml(s){ return String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c])); }
+render();
+</script>
+</body>
+</html>
