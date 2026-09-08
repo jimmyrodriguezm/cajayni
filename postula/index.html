@@ -98,7 +98,7 @@
   .scale-cell.on{background:var(--blue);color:var(--cream);border-color:var(--blue)}
 
   .nav{grid-column:2;display:flex;justify-content:space-between;align-items:center;gap:16px;margin-top:48px;padding-top:24px;border-top:1px solid var(--line)}
-  .btn{border:none;background:none;font-family:inherit;font-size:14px;cursor:pointer;padding:14px 24px;letter-spacing:.02em;transition:.2s;border-radius:99px}
+  .btn{border:none;background:none;font-family:inherit;font-size:14px;cursor:pointer;padding:14px 24px;letter-spacing:.02em;transition:.2s;border-radius:99px;text-decoration:none}
   .btn-primary{background:var(--blue);color:var(--cream);font-weight:500;display:inline-flex;align-items:center;gap:10px;box-shadow:0 6px 18px -6px rgba(29,58,190,.5)}
   .btn-primary:hover{background:var(--blue-dark);transform:translateY(-1px);box-shadow:0 10px 24px -6px rgba(29,58,190,.55)}
   .btn-primary .arr{transition:transform .18s}
@@ -109,14 +109,32 @@
   .err-msg.on{display:block}
   .qhint-max{font-size:12px;color:var(--stone);margin-top:10px;font-family:"JetBrains Mono",monospace;letter-spacing:.05em}
 
-  .end{grid-column:1 / -1;max-width:600px;padding:40px 0}
-  .end .mark-end{font-family:"Fraunces",serif;font-style:italic;color:var(--red);font-size:14px;letter-spacing:.06em;margin-bottom:16px}
-  .end h2{font-family:"Fraunces",serif;font-weight:400;font-size:44px;line-height:1.05;letter-spacing:-.02em;margin:0 0 20px}
+  /* ————————————————— END SCREEN ————————————————— */
+  .end{grid-column:1 / -1;max-width:640px;padding:32px 0}
+  .end .mark-end{
+    font-family:"JetBrains Mono",monospace;
+    font-size:11px;letter-spacing:.22em;text-transform:uppercase;
+    color:var(--red);margin-bottom:24px;
+    display:flex;align-items:center;gap:12px;
+  }
+  .end .mark-end::before{content:"";width:24px;height:2px;background:var(--red)}
+  .end h2{font-family:"Fraunces",serif;font-weight:400;
+    font-size:clamp(38px,5vw,52px);line-height:1.05;letter-spacing:-.02em;
+    margin:0 0 24px;font-variation-settings:"opsz" 96}
   .end h2 em{font-style:italic;color:var(--red)}
-  .end p{font-size:16px;line-height:1.65;color:var(--ink);opacity:.85;max-width:520px}
-  .end details{margin-top:32px}
-  .end summary{cursor:pointer;color:var(--stone);font-size:13px;font-family:"JetBrains Mono",monospace;letter-spacing:.05em}
-  .end pre{background:rgba(0,0,0,.04);padding:16px;border-radius:2px;overflow:auto;font-size:12px;margin-top:12px}
+  .end p{font-size:17px;line-height:1.65;color:var(--ink);opacity:.85;max-width:560px;margin:0}
+  .end .end-cta{margin-top:40px;display:inline-flex}
+  .end .end-cta.disabled{opacity:.7;cursor:not-allowed;pointer-events:none}
+  .end .end-back{
+    display:block;margin-top:32px;
+    color:var(--stone);font-size:12px;
+    font-family:"JetBrains Mono",monospace;
+    letter-spacing:.15em;text-transform:uppercase;
+    text-decoration:none;transition:color .18s;
+  }
+  .end .end-back:hover{color:var(--blue)}
+  .end .signed{margin-top:44px;max-width:none}
+
   .start-btn{margin-top:44px}
 
   @media (max-width:720px){
@@ -254,6 +272,34 @@ const STEPS = [
   { type:"textarea", id:"q30", label:"Cuéntanos un momento difícil que superaste en tu emprendimiento (opcional)",
     showIf: a => (a.q26||"").startsWith("Crecimiento") || (a.q26||"").startsWith("Expansión") },
 ];
+
+// ============ CONFIG DE PANTALLAS DE GRACIAS POR NIVEL ============
+const ENDINGS = {
+  "Nivel 0": {
+    eyebrow: "Contacto registrado",
+    title: "Gracias por acercarte.",
+    body: "Cajayni acompaña hoy a emprendedores que ya están en la cancha. Muy pronto abriremos programas también para quienes recién dan el primer paso — cuando lo hagamos, serás de los primeros en enterarte. Guardamos tu contacto con cariño.",
+    button: null
+  },
+  "Nivel 1": {
+    eyebrow: "Postulación recibida",
+    title: "Recibimos tu postulación.",
+    body: "Tu perfil quedó registrado en la comunidad. Estamos preparando contenido, cursos y encuentros pensados justo para tu momento — <b>muy pronto tendremos novedades</b> para ti por WhatsApp o correo. Nos vemos.",
+    button: null
+  },
+  "Nivel 2": {
+    eyebrow: "Postulación aceptada",
+    title: "Bienvenido a Cajayni.",
+    body: "Tu postulación entró a revisión del equipo. Te contactaremos en los próximos días para agendar tu primera conversación con un mentor. Mientras tanto, empieza a explorar los recursos que preparamos para emprendedores como tú.",
+    button: { label: "Explorar recursos", href: "#" }
+  },
+  "Nivel 3": {
+    eyebrow: "Postulación aceptada",
+    title: "Bienvenido a Cajayni.",
+    body: "Tu postulación va directo al equipo de mentores más cercano a Carlos. Te contactaremos en los próximos días para agendar una conversación 1 a 1 y diseñar contigo el próximo paso de tu negocio.",
+    button: { label: "Ver siguientes pasos", href: "#" }
+  }
+};
 
 const answers = {};
 let idx = 0;
@@ -589,15 +635,14 @@ function advance(s){
     answers[s.id] = val;
   }
   if(s.id === "q8" && endEarly()){
-    return submit("Nivel 0", "¡Gracias por tu interés!","Registramos tu contacto. Te avisaremos cuando tengamos contenido y programas para quienes están dando el primer paso hacia el emprendimiento.");
+    return submit("Nivel 0");
   }
   if(s.id === "q18_personas" && count5PsNoSe(answers) >= 3){
-    return submit("Nivel 1", "¡Gracias por completar la encuesta!","Tus respuestas nos ayudarán a diseñar contenido y programas de acompañamiento inicial pensados justo para tu momento. Nos pondremos en contacto pronto por WhatsApp o correo.");
+    return submit("Nivel 1");
   }
   const ni = nextIdx(idx+1);
   if(ni === -1){
-    // fin del recorrido — calcular nivel según a dónde llegó
-    return submit(computeNivel(), "¡Gracias por completar la encuesta!","Tus respuestas nos permitirán conectarte con los mentores, recursos y programas que mejor calzan con tu momento. Nos pondremos en contacto contigo pronto por WhatsApp o correo.");
+    return submit(computeNivel());
   }
   idx = ni;
   render();
@@ -609,11 +654,8 @@ function goBack(){ const pi = prevIdx(idx-1); if(pi>=0){ idx = pi; render(); } }
 function computeNivel(){
   const a = answers;
   if(a.q8 === "Quiero emprender, nunca lo he hecho") return "Nivel 0";
-  // Nivel 3: llegó al Bloque 3 → responde q29 (obligatoria del bloque 3)
   if(a.q29) return "Nivel 3";
-  // Nivel 2: llegó al Bloque 2 → tiene q22 (autoevaluación)
   if(a.q22 && Object.keys(a.q22).length > 0) return "Nivel 2";
-  // Nivel 1: todo lo demás que llegó a completar el flujo
   return "Nivel 1";
 }
 
@@ -671,7 +713,7 @@ function buildRow(nivel){
   };
 }
 
-function submit(nivel, endTitle, endBody){
+function submit(nivel){
   try{ localStorage.setItem("cajayni_encuesta", JSON.stringify({at:new Date().toISOString(), nivel, answers})); }catch(e){}
   renderSending();
 
@@ -691,29 +733,37 @@ function submit(nivel, endTitle, endBody){
       const t = await r.text();
       throw new Error(`Supabase ${r.status}: ${t}`);
     }
-    renderEnd(endTitle, endBody);
+    renderEnd(nivel);
   }).catch(err => {
     console.error("Error enviando a Supabase:", err);
-    renderEnd(endTitle, endBody + " (Si no ves confirmación en unas horas, escríbenos.)");
+    renderEnd(nivel);
   });
 }
 
 function renderSending(){
   pbar.style.width="100%";
   form.innerHTML = `<div class="card"><div class="end">
-    <div class="mark-end">— Enviando —</div>
+    <div class="mark-end">Enviando</div>
     <h2>Guardando tus respuestas…</h2>
     <p>Un momento, estamos registrando tu perfil en la base de la comunidad.</p>
   </div></div>`;
 }
-function renderEnd(title, body){
+
+function renderEnd(nivel){
+  const cfg = ENDINGS[nivel] || ENDINGS["Nivel 1"];
   pbar.style.width="100%";
+  const btn = cfg.button
+    ? `<a href="${cfg.button.href}" class="btn btn-primary end-cta">${cfg.button.label} <span class="arr">→</span></a>`
+    : '';
   form.innerHTML = `<div class="card"><div class="end">
-    <div class="mark-end">— Fin del formulario —</div>
-    <h2>${title}</h2>
-    <p>${body}</p>
+    <div class="mark-end">${cfg.eyebrow}</div>
+    <h2>${cfg.title}</h2>
+    <p>${cfg.body}</p>
+    ${btn}
+    <a href="../" class="end-back">← Volver a Cajayni</a>
   </div></div>`;
 }
+
 function escapeAttr(s){ return String(s).replace(/"/g,'&quot;'); }
 function escapeHtml(s){ return String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c])); }
 render();
