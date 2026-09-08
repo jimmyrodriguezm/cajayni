@@ -44,7 +44,7 @@
   .nav-cta .arr{transition:transform .2s}
   .nav-cta:hover .arr{transform:translateX(3px)}
 
-  .hero{max-width:1180px;margin:0 auto;padding:100px 32px 80px;display:grid;grid-template-columns:1fr;gap:60px}
+  .hero{max-width:1180px;margin:0 auto;padding:100px 32px 100px;display:grid;grid-template-columns:1fr;gap:60px}
   .hero .eyebrow{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--blue);display:flex;align-items:center;gap:14px;margin-bottom:32px}
   .hero .eyebrow::before{content:"";width:28px;height:1px;background:var(--blue)}
   .hero h1{font-family:"Fraunces",serif;font-weight:400;font-size:clamp(52px,8vw,104px);line-height:.98;letter-spacing:-.03em;margin:0 0 40px;max-width:16ch;font-variation-settings:"opsz" 144, "SOFT" 30}
@@ -60,23 +60,6 @@
   .cta-ghost:hover{color:var(--blue);border-color:var(--blue)}
   .signed{margin-top:56px;padding-top:24px;border-top:1px solid var(--line);display:flex;align-items:baseline;gap:10px;color:var(--stone);font-size:14px;max-width:480px}
   .signed .who{font-family:"Fraunces",serif;font-style:italic;color:var(--ink);font-size:17px}
-
-  .letters{max-width:1180px;margin:40px auto;padding:0 32px 100px}
-  .letters-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
-  .tile{aspect-ratio:1.35 / 1;display:flex;align-items:center;justify-content:center;position:relative;border-radius:6px;overflow:hidden;transition:transform .35s cubic-bezier(.2,.7,.2,1)}
-  .tile:hover{transform:translateY(-4px) rotate(-.5deg)}
-  .tile-letter{font-family:"Fraunces",serif;font-weight:700;font-size:clamp(80px,10vw,140px);color:var(--cream);line-height:1;font-variation-settings:"opsz" 144}
-  .t1{background:var(--blue)}
-  .t2{background:var(--red)}
-  .t3{background:var(--sky)} .t3 .tile-letter{color:var(--blue-dark)}
-  .t4{background:var(--yellow)} .t4 .tile-letter{color:var(--ink)}
-  .t5{background:var(--red)}
-  .t6{background:var(--sky)} .t6 .tile-letter{color:var(--blue-dark)}
-  .t7{background:var(--yellow)} .t7 .tile-letter{color:var(--ink)}
-  .tile-card{background:var(--blue-dark);color:var(--cream);display:flex;flex-direction:column;justify-content:space-between;padding:22px;align-items:flex-start}
-  .tile-card .stack{font-family:"Fraunces",serif;font-weight:500;line-height:.9;font-size:clamp(22px,2.4vw,32px);letter-spacing:.02em}
-  .tile-card .meta{font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--sky);opacity:.9}
-  .tile-card .diamond{width:14px;height:14px;background:var(--red);transform:rotate(45deg);display:inline-block;margin-right:8px;vertical-align:middle}
 
   section.section{max-width:1180px;margin:0 auto;padding:100px 32px;border-top:1px solid var(--line)}
   .section-eyebrow{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--red);display:flex;align-items:center;gap:14px;margin-bottom:28px}
@@ -124,11 +107,8 @@
   footer .fmeta{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--stone)}
 
   @media (max-width:900px){
-    .hero{padding:60px 24px 40px}
-    .letters{padding:0 24px 60px}
+    .hero{padding:60px 24px 60px}
     section.section{padding:60px 24px}
-    .letters-grid{grid-template-columns:repeat(2,1fr)}
-    .tile-letter{font-size:70px}
     .who-body{grid-template-columns:1fr;gap:40px}
     .mv{grid-template-columns:1fr}
     .pillars-grid{grid-template-columns:repeat(2,1fr)}
@@ -137,9 +117,8 @@
   }
   @media (max-width:520px){
     .nav{padding:14px 20px}
-    .hero{padding:44px 20px 30px}
+    .hero{padding:44px 20px 40px}
     .hero h1{font-size:40px}
-    .letters{padding:0 20px 40px}
     section.section{padding:48px 20px}
     .pillars-grid{grid-template-columns:1fr}
     .final{padding:0 20px}
@@ -161,7 +140,7 @@
   <div>
     <div class="eyebrow">Comunidad del Patronato Pikimachay</div>
     <h1>Un espacio para el emprendedor <em>que no se rinde</em>.</h1>
-    <p class="lede">Cajayni acompaña a quienes <strong>mueven y aceleran los motores productivos del Perú</strong> con hambre de salir adelante. Aquí no premiamos títulos ni facturación: premiamos las ganas y a la gente chambeadora.</p>
+    <p class="lede">Cajayni acompaña a quienes <strong>mueven y aceleran los motores productivos del Perú</strong> con hambre de salir adelante por sí mismos y por los suyos. Mentores reales, formación aplicada y una red que te camina al lado.</p>
     <div class="hero-actions">
       <a href="/postula/" class="cta">Postula a la comunidad <span class="arr">→</span></a>
       <a href="#quienes" class="cta-ghost">Conócenos</a>
@@ -173,33 +152,17 @@
   </div>
 </header>
 
-<section class="letters" aria-label="Identidad Cajayni">
-  <div class="letters-grid">
-    <div class="tile t1"><span class="tile-letter">C</span></div>
-    <div class="tile t2"><span class="tile-letter">A</span></div>
-    <div class="tile t3"><span class="tile-letter">J</span></div>
-    <div class="tile t4"><span class="tile-letter">A</span></div>
-    <div class="tile t5"><span class="tile-letter">Y</span></div>
-    <div class="tile t6"><span class="tile-letter">N</span></div>
-    <div class="tile t7"><span class="tile-letter">I</span></div>
-    <div class="tile tile-card">
-      <div class="meta"><span class="diamond"></span>Comunidad · Perú</div>
-      <div class="stack">Chamba,<br>comunidad,<br>raíces.</div>
-    </div>
-  </div>
-</section>
-
 <section class="section" id="quienes">
   <div class="section-eyebrow">Quiénes somos</div>
-  <h2>Una comunidad de peruanos que valoran la chamba por encima del título.</h2>
+  <h2>Una comunidad de peruanos que caminan al lado de otros peruanos.</h2>
   <div class="who-body">
     <div class="who">
-      <p>Somos emprendedores que creemos que la resiliencia vale más que el capital y que las ganas de aportar al país valen más que el logro individual. Nacimos del <strong>Patronato Pikimachay</strong> — nombre del yacimiento arqueológico en Ayacucho donde se encuentran las huellas más antiguas del ser humano en América — y de la convicción de acompañar a quienes construyen el Perú desde abajo.</p>
+      <p>Creemos que la resiliencia vale tanto como el capital y que las ganas de aportar al país valen tanto como el logro individual. Nacimos del <strong>Patronato Pikimachay</strong> — nombre del yacimiento arqueológico en Ayacucho donde se encuentran las huellas más antiguas del ser humano en América — y de la convicción de acompañar a quienes construyen el Perú desde abajo.</p>
       <p><em>Aquí se aprende con y de otros emprendedores. Mentores reales, no discursos. Recursos, cursos y red para dar el siguiente paso — sin importar en qué tramo del camino estés.</em></p>
     </div>
     <aside class="who-aside">
       <div class="lbl">Del fundador</div>
-      <div class="quote">"No premiamos títulos ni facturación. Premiamos las ganas y a la gente chambeadora."</div>
+      <div class="quote">"El Perú avanza cuando su gente chambeadora tiene con quién caminar."</div>
       <div class="signature">— Carlos Añaños Jerí</div>
     </aside>
   </div>
@@ -217,7 +180,7 @@
     </div>
     <div class="mv-block vision">
       <span class="tag">Visión</span>
-      <h3>Un Perú donde el chambeador tenga las mismas oportunidades que el que nace con capital.</h3>
+      <h3>Un Perú donde el chambeador tenga las mismas oportunidades que quien nace con capital.</h3>
       <p>Cerrar la brecha entre el talento peruano y las herramientas para hacerlo escalar — desde Ayacucho al mundo.</p>
       <span class="glyph serif">V</span>
     </div>
@@ -255,7 +218,7 @@
   <div class="final-band">
     <div class="txt">
       <div class="eyebrow">Postula en 8 minutos</div>
-      <h2>Cuéntanos <em>quién eres</em> — no cuánto facturas.</h2>
+      <h2>Da el siguiente paso <em>con nosotros</em>.</h2>
     </div>
     <a href="/postula/" class="cta">Postula ahora <span class="arr">→</span></a>
   </div>
