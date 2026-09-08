@@ -9,17 +9,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,300..800,0..100&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root{
-    --paper:#F4F1E8;
-    --paper-2:#EDE7D5;
-    --ink:#14141A;
-    --stone:#706A5F;
-    --line:#DCD5C2;
-    --blue:#1D3ABE;
-    --blue-dark:#12256B;
-    --red:#E63946;
-    --sky:#A6D8F0;
-    --yellow:#F5B419;
-    --cream:#FFFDF6;
+    --paper:#F4F1E8;--paper-2:#EDE7D5;--ink:#14141A;--stone:#706A5F;--line:#DCD5C2;
+    --blue:#1D3ABE;--blue-dark:#12256B;--red:#E63946;--sky:#A6D8F0;--yellow:#F5B419;--cream:#FFFDF6;
   }
   *{box-sizing:border-box}
   html,body{margin:0;padding:0}
@@ -598,34 +589,112 @@ function advance(s){
     answers[s.id] = val;
   }
   if(s.id === "q8" && endEarly()){
-    return renderEnd("¡Gracias por tu interés!","Registramos tu contacto. Te avisaremos cuando tengamos contenido y programas para quienes están dando el primer paso hacia el emprendimiento.");
+    return submit("Nivel 0", "¡Gracias por tu interés!","Registramos tu contacto. Te avisaremos cuando tengamos contenido y programas para quienes están dando el primer paso hacia el emprendimiento.");
   }
   if(s.id === "q18_personas" && count5PsNoSe(answers) >= 3){
-    return renderEnd("¡Gracias por completar la encuesta!","Tus respuestas nos ayudarán a diseñar contenido y programas de acompañamiento inicial pensados justo para tu momento. Nos pondremos en contacto pronto por WhatsApp o correo.");
+    return submit("Nivel 1", "¡Gracias por completar la encuesta!","Tus respuestas nos ayudarán a diseñar contenido y programas de acompañamiento inicial pensados justo para tu momento. Nos pondremos en contacto pronto por WhatsApp o correo.");
   }
   const ni = nextIdx(idx+1);
-  if(ni === -1){ return submit(); }
+  if(ni === -1){
+    // fin del recorrido — calcular nivel según a dónde llegó
+    return submit(computeNivel(), "¡Gracias por completar la encuesta!","Tus respuestas nos permitirán conectarte con los mentores, recursos y programas que mejor calzan con tu momento. Nos pondremos en contacto contigo pronto por WhatsApp o correo.");
+  }
   idx = ni;
   render();
 }
 
 function goBack(){ const pi = prevIdx(idx-1); if(pi>=0){ idx = pi; render(); } }
 
-const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbyLAcfXuFqrj3fMQIU8J1ih9dWNEvZ6fMvO1aR9lgbWkmBQ-thts5nJA0hCZm4IMPuuJw/exec";
+// ============ CÁLCULO DE NIVEL ============
+function computeNivel(){
+  const a = answers;
+  if(a.q8 === "Quiero emprender, nunca lo he hecho") return "Nivel 0";
+  // Nivel 3: llegó al Bloque 3 → responde q29 (obligatoria del bloque 3)
+  if(a.q29) return "Nivel 3";
+  // Nivel 2: llegó al Bloque 2 → tiene q22 (autoevaluación)
+  if(a.q22 && Object.keys(a.q22).length > 0) return "Nivel 2";
+  // Nivel 1: todo lo demás que llegó a completar el flujo
+  return "Nivel 1";
+}
 
-function submit(){
-  try{ localStorage.setItem("cajayni_encuesta", JSON.stringify({at:new Date().toISOString(),answers})); }catch(e){}
+// ============ SUPABASE ============
+const SUPABASE_URL = "https://bemqktcxfkvjzumclgdv.supabase.co";
+const SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJlbXFrdGN4Zmt2anp1bWNsZ2R2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg4MjMyNDIsImV4cCI6MjEwNDM5OTI0Mn0.INtOxnAdTNC6hgqJS-iQC8_a1vXtg3mUl2h-KuJ8Hg8";
+
+function buildRow(nivel){
+  const a = answers;
+  const cel = a.q6 || {};
+  return {
+    submitted_at: new Date().toISOString(),
+    nombre: a.q1 || null,
+    dni: a.q2 || null,
+    nacionalidad: a.q3 || null,
+    region: a.q4 || null,
+    distrito: a.q5 || null,
+    celular: cel.display || null,
+    celular_dial: cel.dial || null,
+    celular_num: cel.num || null,
+    email: a.q7 || null,
+    situacion: a.q8 || null,
+    opera_donde: a.q9 || null,
+    aporta_como: a.q10 || null,
+    nombre_negocio: a.q11 || null,
+    sector: a.q12 || null,
+    ventas: a.q13 || null,
+    tiempo_operacion: a.q14 || null,
+    facturacion: a.q15 || null,
+    colaboradores: a.q16 || null,
+    familia_directa: a.q17 || null,
+    p_producto: a.q18_producto || null,
+    p_precio: a.q18_precio || null,
+    p_plaza: a.q18_plaza || null,
+    p_promocion: a.q18_promocion || null,
+    p_personas: a.q18_personas || null,
+    nose_count: count5PsNoSe(a),
+    mentoria: a.q19 || null,
+    mentoria_porque: a.q19b || null,
+    desafio_1: a.q20 ? a.q20[0] || null : null,
+    desafio_2: a.q20 ? a.q20[1] || null : null,
+    recursos: a.q21 && a.q21.length ? a.q21 : null,
+    autoeval: a.q22 && Object.keys(a.q22).length ? a.q22 : null,
+    cliente: a.q23 || null,
+    situacion_arquetipo: a.q24 || null,
+    canal: a.q25c || null,
+    etapa: a.q26 || null,
+    problema_mentor: a.q25 || null,
+    preferencia_mentor: a.q27 || null,
+    uso_utilidad: a.q28 || null,
+    por_que_empresa: a.q29 || null,
+    momento_dificil: a.q30 || null,
+    nivel: nivel,
+    payload: { ...a }
+  };
+}
+
+function submit(nivel, endTitle, endBody){
+  try{ localStorage.setItem("cajayni_encuesta", JSON.stringify({at:new Date().toISOString(), nivel, answers})); }catch(e){}
   renderSending();
-  fetch(WEBHOOK_URL, {
-    method: "POST", mode: "cors",
-    headers: { "Content-Type": "text/plain;charset=utf-8" },
-    body: JSON.stringify({ ...answers, _submittedAt: new Date().toISOString() }),
+
+  const row = buildRow(nivel);
+  fetch(`${SUPABASE_URL}/rest/v1/postulaciones`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "apikey": SUPABASE_ANON,
+      "Authorization": `Bearer ${SUPABASE_ANON}`,
+      "Prefer": "return=minimal"
+    },
+    body: JSON.stringify(row),
     keepalive: true,
-  }).then(r => r.text()).then(() => {
-    renderEnd("¡Gracias por completar la encuesta!","Tus respuestas nos permitirán conectarte con los mentores, recursos y programas que mejor calzan con tu momento. Nos pondremos en contacto contigo pronto por WhatsApp o correo.");
+  }).then(async r => {
+    if(!r.ok){
+      const t = await r.text();
+      throw new Error(`Supabase ${r.status}: ${t}`);
+    }
+    renderEnd(endTitle, endBody);
   }).catch(err => {
-    console.error("Error enviando a Sheet:", err);
-    renderEnd("¡Gracias por completar la encuesta!","Tus respuestas quedaron registradas. Si no ves confirmación por WhatsApp o correo en las próximas horas, escríbenos.");
+    console.error("Error enviando a Supabase:", err);
+    renderEnd(endTitle, endBody + " (Si no ves confirmación en unas horas, escríbenos.)");
   });
 }
 
@@ -643,9 +712,6 @@ function renderEnd(title, body){
     <div class="mark-end">— Fin del formulario —</div>
     <h2>${title}</h2>
     <p>${body}</p>
-    <details><summary>Ver mis respuestas</summary>
-      <pre>${escapeHtml(JSON.stringify(answers,null,2))}</pre>
-    </details>
   </div></div>`;
 }
 function escapeAttr(s){ return String(s).replace(/"/g,'&quot;'); }
